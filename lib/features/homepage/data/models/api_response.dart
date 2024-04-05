@@ -10,7 +10,7 @@ class ApiResponse extends Equatable {
   String? status;
   int? code;
   int? total;
-  List<Person>? data;
+  dynamic data;
 
   ApiResponse({
     this.status,
