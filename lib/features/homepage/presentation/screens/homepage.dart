@@ -50,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
               if (state is HomepageInitial) {
                 print(state);
               } else if (state is LoadListOfPersonSuccess) {
-                print('success: ${state.apiResponse}');
-                _strResponse = state.apiResponse.toString();
+                print('success: ${state.persons}');
+                _strResponse = state.persons.toString();
               }
             },
           ),
