@@ -11,9 +11,9 @@ part 'homepage_state.dart';
 class HomepageCubit extends Cubit<HomepageState> {
   final GetListOfPersonsUseCase? getListOfPersonsUseCase;
 
-  HomepageCubit(
+  HomepageCubit({
     this.getListOfPersonsUseCase,
-  ) : super(HomepageInitial());
+  }) : super(HomepageInitial());
 
   Future<void> getListOfPersons(int quantity) async {
     final result = await getListOfPersonsUseCase?.execute(quantity);
