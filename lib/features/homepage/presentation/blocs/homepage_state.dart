@@ -9,7 +9,13 @@ sealed class HomepageState extends Equatable {
 final class HomepageInitial extends HomepageState {}
 
 final class LoadListOfPersonSuccess extends HomepageState {
-  final Response apiResponse;
+  final List<Person> persons;
 
-  LoadListOfPersonSuccess(this.apiResponse);
+  LoadListOfPersonSuccess(this.persons);
+}
+
+final class LoadListOfPersonFailed extends HomepageState {
+  final ServerError serverError;
+
+  LoadListOfPersonFailed(this.serverError);
 }
