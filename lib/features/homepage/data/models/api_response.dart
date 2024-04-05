@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'person.dart';
@@ -5,7 +6,7 @@ import 'person.dart';
 part 'api_response.g.dart';
 
 @JsonSerializable()
-class ApiResponse {
+class ApiResponse extends Equatable {
   String? status;
   int? code;
   int? total;
@@ -22,4 +23,12 @@ class ApiResponse {
       _$ApiResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ApiResponseToJson(this);
+
+  @override
+  List<Object?> get props => [
+        status,
+        code,
+        total,
+        data,
+      ];
 }
