@@ -1,9 +1,13 @@
+import 'package:fake_api_exam/core/utils/common_widgets/reusable_card_container.dart';
+import 'package:fake_api_exam/core/utils/common_widgets/reusable_circular_button.dart';
 import 'package:fake_api_exam/features/homepage/presentation/blocs/homepage_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/const/routes_const.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/resource/color_palette.dart';
+import '../../../../core/utils/common_widgets/reusable_list_item.dart';
 import '../../data/models/person.dart';
 
 class Homepage extends StatefulWidget {
@@ -21,6 +25,7 @@ class _HomepageState extends State<Homepage> {
   late BuildContext _context;
   late ScrollController _scrollController;
   late GlobalKey<RefreshIndicatorState> _refreshIndicatorKey;
+
   @override
   void initState() {
     _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
@@ -88,31 +93,31 @@ class _HomepageState extends State<Homepage> {
         children: [
           Expanded(
             flex: 2,
-            child: ListView.separated(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              key: const PageStorageKey(0),
-              itemCount: persons.length,
-              itemBuilder: (_, i) {
-                Person person = persons[i];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      RoutesConst.detailsPage,
-                      arguments: person,
-                    );
-                  },
-                  child: ListTile(
-                    title: Text(
-                      '${person.firstname} $i',
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.builder(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                key: const PageStorageKey(0),
+                itemCount: persons.length,
+                itemBuilder: (_, i) {
+                  Person person = persons[i];
+                  return ReusableListItem(
+                    cardContent: const ReusableCardContainer(),
+                    circularButton: ReusableCircularButton(
+                      buttonColor: AppColors.circularButtonColor,
+                      icon: Icons.info_outline_rounded,
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          RoutesConst.detailsPage,
+                          arguments: person,
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(height: 1);
-              },
+                  );
+                },
+              ),
             ),
           ),
           Visibility(
