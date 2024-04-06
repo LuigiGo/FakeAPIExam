@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:fake_api_exam/core/base/base_repository_impl.dart';
-import 'package:fake_api_exam/core/const/apiconst.dart';
-import 'package:fake_api_exam/core/const/keyconst.dart';
+import 'package:fake_api_exam/core/const/api_const.dart';
+import 'package:fake_api_exam/core/const/key_const.dart';
 import 'package:fake_api_exam/core/network/dio_client.dart';
 import 'package:fake_api_exam/core/network/exceptions/server_error.dart';
 

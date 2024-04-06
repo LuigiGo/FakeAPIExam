@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fake_api_exam/core/const/keyconst.dart';
+import 'package:fake_api_exam/core/const/key_const.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DioClient {
