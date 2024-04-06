@@ -1,6 +1,6 @@
 import 'package:fake_api_exam/core/const/key_const.dart';
 import 'package:fake_api_exam/core/di/injection.dart';
-import 'package:fake_api_exam/core/utils/environments.dart';
+import 'package:fake_api_exam/core/environments.dart';
 import 'package:flutter/material.dart';
 
 import 'app.dart';
