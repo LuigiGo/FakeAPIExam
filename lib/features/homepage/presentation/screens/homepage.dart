@@ -18,6 +18,30 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<Person> persons = [];
 
+  late BuildContext _context;
+  late HomepageState _state;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _initScrollListener();
+    super.initState();
+  }
+
+  void _initScrollListener() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.position.atEdge) {
+        bool isTopOfList = _scrollController.position.pixels == 0;
+        if (!isTopOfList) {
+          setState(() {
+            _context.read<HomepageCubit>().getListOfPersons(20);
+          });
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -40,34 +64,55 @@ class _HomepageState extends State<Homepage> {
         ],
         child: BlocBuilder<HomepageCubit, HomepageState>(
           builder: (context, state) {
+            _state = state;
+            _context = context;
             if (state is HomepageInitial) {
-              context.read<HomepageCubit>().getListOfPersons(10);
+              _context.read<HomepageCubit>().getListOfPersons(10);
             }
 
             return Scaffold(
               appBar: AppBar(
                 title: Text(widget.title),
               ),
-              body: ListView.separated(
-                itemCount: persons.length,
-                itemBuilder: (_, i) {
-                  Person person = persons[i];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        RoutesConst.detailsPage,
-                        arguments: person,
-                      );
-                    },
-                    child: ListTile(
-                      title: Text(person.firstname ?? ''),
+              body: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      key: const PageStorageKey(0),
+                      physics: const ScrollPhysics(),
+                      itemCount: persons.length,
+                      itemBuilder: (_, i) {
+                        Person person = persons[i];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesConst.detailsPage,
+                              arguments: person,
+                            );
+                          },
+                          child: ListTile(
+                            title: Text(
+                              person.firstname ?? '',
+                              style: const TextStyle(
+                                fontSize: 70.0,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Divider(height: 1);
+                      },
                     ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(height: 1);
-                },
+                  ),
+                  Visibility(
+                    visible: state is LoadListOfPersonsLoading,
+                    child: const CircularProgressIndicator(),
+                  ),
+                ],
               ),
             );
           },
