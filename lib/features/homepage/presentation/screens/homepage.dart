@@ -19,13 +19,109 @@ class _HomepageState extends State<Homepage> {
   List<Person> persons = [];
 
   late BuildContext _context;
-  late HomepageState _state;
   late ScrollController _scrollController;
-
+  late GlobalKey<RefreshIndicatorState> _refreshIndicatorKey;
   @override
   void initState() {
+    _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
     _initScrollListener();
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) {
+          return HomepageCubit(
+            getListOfPersonsUseCase: inject(),
+          );
+        }),
+      ],
+      child: _buildMultiBlocListener(),
+    );
+  }
+
+  MultiBlocListener _buildMultiBlocListener() {
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<HomepageCubit, HomepageState>(
+          listener: (_, state) {
+            if (state is RefreshHomepage) {
+              persons.clear();
+            } else if (state is LoadListOfPersonSuccess) {
+              persons.addAll(state.persons);
+            } else if (state is LoadListOfPersonFailed) {}
+          },
+        ),
+      ],
+      child: _buildBlocBuilder(),
+    );
+  }
+
+  BlocBuilder<HomepageCubit, HomepageState> _buildBlocBuilder() {
+    return BlocBuilder<HomepageCubit, HomepageState>(
+      builder: (context, state) {
+        _context = context;
+
+        if (state is HomepageInitial) {
+          _refreshIndicatorKey.currentState?.show();
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+          ),
+          body: _buildBody(context, state),
+        );
+      },
+    );
+  }
+
+  Widget _buildBody(BuildContext context, HomepageState state) {
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: () async {
+        await _loadMoreData(10, isRefresh: true);
+      },
+      child: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: ListView.separated(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              key: const PageStorageKey(0),
+              itemCount: persons.length,
+              itemBuilder: (_, i) {
+                Person person = persons[i];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesConst.detailsPage,
+                      arguments: person,
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(
+                      '${person.firstname} $i',
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(height: 1);
+              },
+            ),
+          ),
+          Visibility(
+            visible: state is LoadListOfPersonsLoading,
+            child: const CircularProgressIndicator(),
+          ),
+        ],
+      ),
+    );
   }
 
   void _initScrollListener() {
@@ -42,90 +138,11 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) {
-          return HomepageCubit(
-            getListOfPersonsUseCase: inject(),
-          );
-        }),
-      ],
-      child: MultiBlocListener(
-        listeners: [
-          BlocListener<HomepageCubit, HomepageState>(
-            listener: (_, state) {
-              if (state is LoadListOfPersonSuccess) {
-                persons.addAll(state.persons);
-              } else if (state is LoadListOfPersonFailed) {}
-            },
-          ),
-        ],
-        child: BlocBuilder<HomepageCubit, HomepageState>(
-          builder: (context, state) {
-            _state = state;
-            _context = context;
-
-            if (state is HomepageInitial) {
-              _loadMoreData(10);
-            }
-
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(widget.title),
-              ),
-              body: _buildBody(context, state),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBody(BuildContext context, HomepageState state) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: ListView.separated(
-            controller: _scrollController,
-            key: const PageStorageKey(0),
-            physics: const ScrollPhysics(),
-            itemCount: persons.length,
-            itemBuilder: (_, i) {
-              Person person = persons[i];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    RoutesConst.detailsPage,
-                    arguments: person,
-                  );
-                },
-                child: Container(
-                  decoration: BoxDecoration(),
-                ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(height: 1);
-            },
-          ),
-        ),
-        Visibility(
-          visible: state is LoadListOfPersonsLoading,
-          child: const CircularProgressIndicator(),
-        ),
-      ],
-    );
-  }
-
-  void _loadMoreData(
+  Future<void> _loadMoreData(
     int quantity, {
     bool isRefresh = false,
-  }) {
-    _context
+  }) async {
+    await _context
         .read<HomepageCubit>()
         .getListOfPersons(quantity, isRefresh: isRefresh);
   }
