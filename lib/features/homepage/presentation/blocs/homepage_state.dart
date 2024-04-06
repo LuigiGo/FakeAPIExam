@@ -8,6 +8,8 @@ sealed class HomepageState extends Equatable {
 
 final class HomepageInitial extends HomepageState {}
 
+final class RefreshHomepage extends HomepageState {}
+
 final class LoadListOfPersonsLoading extends HomepageState {}
 
 final class LoadListOfPersonSuccess extends HomepageState {

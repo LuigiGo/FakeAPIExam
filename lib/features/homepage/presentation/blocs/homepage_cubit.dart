@@ -19,7 +19,12 @@ class HomepageCubit extends Cubit<HomepageState> {
     int quantity, {
     bool isRefresh = false,
   }) async {
-    emit(LoadListOfPersonsLoading());
+    if (!isRefresh) {
+      emit(LoadListOfPersonsLoading());
+    } else {
+      emit(RefreshHomepage());
+    }
+
     final result = await getListOfPersonsUseCase?.execute(quantity);
     result?.fold(
       (failure) => emit(LoadListOfPersonFailed(failure)),
