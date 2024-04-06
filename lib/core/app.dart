@@ -1,3 +1,4 @@
+import 'package:fake_api_exam/core/resource/app_typography.dart';
 import 'package:fake_api_exam/core/resource/color_palette.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +23,8 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(
-            color: AppColors.textColor,
-          ),
+          bodyLarge: AppTypography.textBodyLarge,
+          bodyMedium: AppTypography.textBodyMedium,
         ),
       ),
       initialRoute: RoutesConst.root,
