@@ -1,3 +1,4 @@
-class Routes {
+class RoutesConst {
   static const root = '/';
+  static const detailsPage = '/personsDetailsPage';
 }
