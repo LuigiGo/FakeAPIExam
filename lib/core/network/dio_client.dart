@@ -1,11 +1,16 @@
 import 'package:dio/dio.dart';
 import 'package:fake_api_exam/core/const/key_const.dart';
+import 'package:fake_api_exam/core/network/http_logging_interceptor.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class DioClient {
-  late Dio _dio;
+  Dio dio;
+  HttpLoggingInterceptor loggingInterceptor;
 
-  DioClient() {
+  DioClient({
+    required this.dio,
+    required this.loggingInterceptor,
+  }) {
     String baseUrl = dotenv.get(
       KeyConst.baseUrl,
       fallback: 'Undefined Base URL',
@@ -15,10 +20,11 @@ class DioClient {
       baseUrl: baseUrl,
     );
 
-    _dio = Dio(options);
+    dio = Dio(options);
+    dio.interceptors.add(loggingInterceptor);
   }
 
   Dio getDio() {
-    return _dio;
+    return dio;
   }
 }
