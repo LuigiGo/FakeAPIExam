@@ -42,6 +42,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   either_dart: ^1.0.0
   get_it: ^6.1.1
+  logger: ^2.2.0
 
 dev_dependencies:
   flutter_test:
