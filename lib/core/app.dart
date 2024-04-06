@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../features/homepage/presentation/screens/homepage.dart';
+import 'const/routes_const.dart';
+import 'navigation/route_generator.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -13,7 +14,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: false,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: Routes.root,
+      onGenerateRoute: RouteGenerator.generateRoute,
     );
   }
 }
