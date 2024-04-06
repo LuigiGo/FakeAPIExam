@@ -1,3 +1,4 @@
+import 'package:fake_api_exam/core/resource/color_palette.dart';
 import 'package:flutter/material.dart';
 
 import 'const/routes_const.dart';
@@ -11,8 +12,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: false,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          backgroundColor: AppColors.appBarColor,
+        ),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.colorScheme,
+          brightness: Brightness.light,
+        ),
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(
+            color: AppColors.textColor,
+          ),
+        ),
       ),
       initialRoute: RoutesConst.root,
       onGenerateRoute: RouteGenerator.generateRoute,
