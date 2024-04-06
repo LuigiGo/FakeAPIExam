@@ -16,6 +16,7 @@ class HomepageCubit extends Cubit<HomepageState> {
   }) : super(HomepageInitial());
 
   Future<void> getListOfPersons(int quantity) async {
+    emit(LoadListOfPersonsLoading());
     final result = await getListOfPersonsUseCase?.execute(quantity);
     result?.fold(
       (failure) => emit(LoadListOfPersonFailed(failure)),

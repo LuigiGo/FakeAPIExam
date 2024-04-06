@@ -2,6 +2,7 @@ import 'package:fake_api_exam/features/homepage/presentation/blocs/homepage_cubi
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/const/routes_const.dart';
 import '../../../../core/di/injection.dart';
 import '../../data/models/person.dart';
 
@@ -45,15 +46,23 @@ class _HomepageState extends State<Homepage> {
 
             return Scaffold(
               appBar: AppBar(
-                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                 title: Text(widget.title),
               ),
               body: ListView.separated(
                 itemCount: persons.length,
                 itemBuilder: (_, i) {
                   Person person = persons[i];
-                  return ListTile(
-                    title: Text(person.firstname ?? ''),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        RoutesConst.detailsPage,
+                        arguments: person,
+                      );
+                    },
+                    child: ListTile(
+                      title: Text(person.firstname ?? ''),
+                    ),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
