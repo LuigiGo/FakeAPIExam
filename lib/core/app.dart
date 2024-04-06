@@ -17,10 +17,10 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
           backgroundColor: AppColors.appBarColor,
         ),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: AppColors.colorScheme,
-          brightness: Brightness.light,
+        colorScheme: const ColorScheme.light(
+          primary: AppColors.primaryColorScheme,
         ),
+        scaffoldBackgroundColor: AppColors.scaffoldBackgroundColor,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(
             color: AppColors.textColor,
