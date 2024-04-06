@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fake_api_exam/core/const/image_const.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_card_container.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_circular_button.dart';
 import 'package:fake_api_exam/features/homepage/presentation/blocs/homepage_cubit.dart';
+import 'package:fake_api_exam/features/homepage/presentation/screens/widgets/person_details_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -103,7 +106,9 @@ class _HomepageState extends State<Homepage> {
                 itemBuilder: (_, i) {
                   Person person = persons[i];
                   return ReusableListItem(
-                    cardContent: const ReusableCardContainer(),
+                    card: ReusableCardContainer(
+                      cardContent: PersonDetailsContent(person: person),
+                    ),
                     circularButton: ReusableCircularButton(
                       buttonColor: AppColors.circularButtonColor,
                       icon: Icons.info_outline_rounded,
