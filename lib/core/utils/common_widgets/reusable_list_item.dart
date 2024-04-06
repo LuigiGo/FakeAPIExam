@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ReusableListItem extends StatelessWidget {
-  final Widget cardContent;
+  final Widget card;
   final Widget? circularButton;
 
   const ReusableListItem({
     super.key,
-    required this.cardContent,
+    required this.card,
     this.circularButton,
   });
 
@@ -15,7 +15,7 @@ class ReusableListItem extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          child: cardContent,
+          child: card,
         ),
         Positioned(
           right: 0,
