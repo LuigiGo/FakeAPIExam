@@ -15,13 +15,19 @@ class HomepageCubit extends Cubit<HomepageState> {
     this.getListOfPersonsUseCase,
   }) : super(HomepageInitial());
 
-  Future<void> getListOfPersons(int quantity) async {
+  Future<void> getListOfPersons(
+    int quantity, {
+    bool isRefresh = false,
+  }) async {
     emit(LoadListOfPersonsLoading());
     final result = await getListOfPersonsUseCase?.execute(quantity);
     result?.fold(
       (failure) => emit(LoadListOfPersonFailed(failure)),
       (response) => emit(
-        LoadListOfPersonSuccess(response.data as List<Person>),
+        LoadListOfPersonSuccess(
+          response.data as List<Person>,
+          isRefresh: isRefresh,
+        ),
       ),
     );
   }

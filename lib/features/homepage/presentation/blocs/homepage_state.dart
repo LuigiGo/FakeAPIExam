@@ -12,8 +12,12 @@ final class LoadListOfPersonsLoading extends HomepageState {}
 
 final class LoadListOfPersonSuccess extends HomepageState {
   final List<Person> persons;
+  final bool isRefresh;
 
-  LoadListOfPersonSuccess(this.persons);
+  LoadListOfPersonSuccess(
+    this.persons, {
+    this.isRefresh = false,
+  });
 }
 
 final class LoadListOfPersonFailed extends HomepageState {

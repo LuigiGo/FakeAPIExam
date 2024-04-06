@@ -35,7 +35,7 @@ class _HomepageState extends State<Homepage> {
         bool isTopOfList = _scrollController.position.pixels == 0;
         if (!isTopOfList) {
           setState(() {
-            _context.read<HomepageCubit>().getListOfPersons(20);
+            _loadMoreData(20);
           });
         }
       }
@@ -66,58 +66,67 @@ class _HomepageState extends State<Homepage> {
           builder: (context, state) {
             _state = state;
             _context = context;
+
             if (state is HomepageInitial) {
-              _context.read<HomepageCubit>().getListOfPersons(10);
+              _loadMoreData(10);
             }
 
             return Scaffold(
               appBar: AppBar(
                 title: Text(widget.title),
               ),
-              body: Column(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      key: const PageStorageKey(0),
-                      physics: const ScrollPhysics(),
-                      itemCount: persons.length,
-                      itemBuilder: (_, i) {
-                        Person person = persons[i];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              RoutesConst.detailsPage,
-                              arguments: person,
-                            );
-                          },
-                          child: ListTile(
-                            title: Text(
-                              person.firstname ?? '',
-                              style: const TextStyle(
-                                fontSize: 70.0,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Divider(height: 1);
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: state is LoadListOfPersonsLoading,
-                    child: const CircularProgressIndicator(),
-                  ),
-                ],
-              ),
+              body: _buildBody(context, state),
             );
           },
         ),
       ),
     );
+  }
+
+  Widget _buildBody(BuildContext context, HomepageState state) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 2,
+          child: ListView.separated(
+            controller: _scrollController,
+            key: const PageStorageKey(0),
+            physics: const ScrollPhysics(),
+            itemCount: persons.length,
+            itemBuilder: (_, i) {
+              Person person = persons[i];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    RoutesConst.detailsPage,
+                    arguments: person,
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(),
+                ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider(height: 1);
+            },
+          ),
+        ),
+        Visibility(
+          visible: state is LoadListOfPersonsLoading,
+          child: const CircularProgressIndicator(),
+        ),
+      ],
+    );
+  }
+
+  void _loadMoreData(
+    int quantity, {
+    bool isRefresh = false,
+  }) {
+    _context
+        .read<HomepageCubit>()
+        .getListOfPersons(quantity, isRefresh: isRefresh);
   }
 }
