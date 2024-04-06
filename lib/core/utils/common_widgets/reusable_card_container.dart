@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class ReusableCardContainer extends StatelessWidget {
+  final Widget? cardContent;
+
   const ReusableCardContainer({
     super.key,
+    this.cardContent,
   });
 
   @override
@@ -13,10 +16,11 @@ class ReusableCardContainer extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),
-        child: const SizedBox(
-          width: double.infinity,
-          height: 120.0,
-        ),
+        child: cardContent ??
+            const SizedBox(
+              width: double.infinity,
+              height: 120.0,
+            ),
       ),
     );
   }
