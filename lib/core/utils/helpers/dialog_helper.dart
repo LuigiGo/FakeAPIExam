@@ -3,6 +3,8 @@ import 'package:fake_api_exam/core/utils/common_widgets/text_title_large.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/text_title_medium.dart';
 import 'package:flutter/material.dart';
 
+import '../../resource/color_palette.dart';
+
 class DialogHelper {
   void showOneButtonDialog(
     BuildContext context, {
@@ -39,6 +41,7 @@ class DialogHelper {
               SizedBox(height: 10.0),
               TextTitleMedium(
                 value: subtitle,
+                textColor: AppColors.alternativeLabelColor,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 40.0),
