@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:fake_api_exam/core/const/string_conts.dart';
 import 'package:fake_api_exam/core/network/exceptions/server_error.dart';
 
 mixin BaseRepositoryImpl {
@@ -12,21 +13,27 @@ mixin BaseRepositoryImpl {
             return Right(response);
           default:
             return Left(
-              ServerError(message: 'Error!'),
+              ServerError(message: StringConst.kSomethingWentWrong),
             );
         }
       } else {
-        print('Error!');
+        return Left(
+          ServerError(message: StringConst.kSomethingWentWrong),
+        );
       }
     } on DioException catch (e) {
       if (e.response != null) {
-        print('Success: ${e.response}');
+        return Left(
+          ServerError(message: StringConst.kSomethingWentWrong),
+        );
       } else {
-        print('Error!');
+        return Left(
+          ServerError(
+            header: StringConst.kSomethingWentWrong,
+            message: e.message,
+          ),
+        );
       }
     }
-    return Left(
-      ServerError(message: 'Error!'),
-    );
   }
 }
