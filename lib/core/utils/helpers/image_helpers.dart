@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../const/image_const.dart';
@@ -10,39 +9,19 @@ class ImageHelpers {
     double? width,
     double? height,
   }) {
+    String defaultPlaceholder = placeholder ?? ImageConst.kAssetProfile;
     return FadeInImage(
-      height: 50,
-      width: 50,
+      width: width,
+      height: height,
       image: NetworkImage(imgUrl ?? ''),
-      placeholder: const AssetImage(
-        ImageConst.defaultImagePlaceholder,
-      ),
+      placeholder: AssetImage(defaultPlaceholder),
       imageErrorBuilder: (context, error, stackTrace) {
         return Image.asset(
-          ImageConst.defaultImagePlaceholder,
-          height: 50,
-          width: 50,
+          defaultPlaceholder,
+          width: width,
+          height: height,
         );
       },
     );
-    // return ClipOval(
-    //   child: CachedNetworkImage(
-    //     imageUrl: imgUrl ?? '',
-    //     placeholder: (context, url) => const Center(
-    //       child: SizedBox(
-    //         width: 30.0,
-    //         height: 30.0,
-    //         child: CircularProgressIndicator(),
-    //       ),
-    //     ),
-    //     errorWidget: (context, url, error) {
-    //       return SizedBox(
-    //         width: width ?? 50.0,
-    //         height: height ?? 50.0,
-    //         child: Icon(Icons.person),
-    //       );
-    //     },
-    //   ),
-    // );
   }
 }
