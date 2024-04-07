@@ -18,9 +18,9 @@
     </queries>
 
     <application
-        android:label="fake_api_exam"
+        android:label="FakeApi App"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
