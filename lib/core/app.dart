@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
 import 'const/routes_const.dart';
+import 'const/string_conts.dart';
 import 'navigation/route_generator.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,8 +14,9 @@ class MyApp extends StatelessWidget {
     return ResponsiveApp(
       builder: (BuildContext context) {
         return MaterialApp(
-          title: 'FakeApi',
+          title: StringConst.kAppName,
           theme: ThemeData(
+            fontFamily: StringConst.kDefaultFontFamily,
             useMaterial3: false,
             appBarTheme: const AppBarTheme(
               centerTitle: true,
