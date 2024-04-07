@@ -29,12 +29,14 @@ class ReusableListItem2 extends StatelessWidget {
           Expanded(
             flex: 1,
             child: _imageHelpers.loadImage(
+              width: 20.0,
+              height: 20.0,
               imgUrl: listItemMapper.image,
               placeholder: placeholder,
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
