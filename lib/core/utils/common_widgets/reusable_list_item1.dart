@@ -30,6 +30,8 @@ class ReusableListItem1 extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: _imageHelpers.loadImage(
+              width: 50.0,
+              height: 50.0,
               imgUrl: listItemMapper.image,
               placeholder: placeholder,
             ),
