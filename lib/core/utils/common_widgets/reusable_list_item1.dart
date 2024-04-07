@@ -47,6 +47,7 @@ class ReusableListItem1 extends StatelessWidget {
               TextTitleMedium(
                 value: listItemMapper.subtitle,
                 textColor: AppColors.alternativeLabelColor,
+                textOverflow: TextOverflow.ellipsis,
               ),
             ],
           ),
