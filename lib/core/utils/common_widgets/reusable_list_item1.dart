@@ -1,53 +1,56 @@
+import 'package:fake_api_exam/core/resource/color_palette.dart';
 import 'package:fake_api_exam/core/utils/helpers/image_helpers.dart';
+import 'package:fake_api_exam/core/utils/mapper/list_item_mapper.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../core/di/injection.dart';
-import '../../../../../core/utils/common_widgets/text_body_large.dart';
-import '../../../../../core/utils/common_widgets/text_body_medium.dart';
-import '../../../data/models/person.dart';
+import '../../di/injection.dart';
+import 'text_title_large.dart';
+import 'text_title_medium.dart';
 
-class PersonDetailsContent extends StatelessWidget {
+class ReusableListItem1 extends StatelessWidget {
   final String? placeholder;
-  final Person person;
+  final ListItemMapper listItemMapper;
 
   final ImageHelpers _imageHelpers = inject<ImageHelpers>();
 
-  PersonDetailsContent({
+  ReusableListItem1({
     super.key,
     this.placeholder,
-    required this.person,
+    required this.listItemMapper,
   });
 
   @override
   Widget build(BuildContext context) {
-    String name = '${person.firstname} ${person.lastname}';
-
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           flex: 1,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: _imageHelpers.loadNetworkImage(
-              imgUrl: person.image,
+            child: _imageHelpers.loadImage(
+              imgUrl: listItemMapper.image,
               placeholder: placeholder,
             ),
           ),
         ),
         Expanded(
-          flex: 3,
+          flex: 2,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextBodyLarge(
-                value: name,
+              TextTitleLarge(
+                value: listItemMapper.title,
                 fontWeight: FontWeight.bold,
               ),
-              TextBodyMedium(value: person.email),
+              TextTitleMedium(
+                value: listItemMapper.subtitle,
+                textColor: AppColors.alternativeLabelColor,
+              ),
             ],
           ),
-        ),
+        )
       ],
     );
   }
