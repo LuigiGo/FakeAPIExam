@@ -1,6 +1,8 @@
 import 'package:fake_api_exam/core/const/image_const.dart';
+import 'package:fake_api_exam/core/const/string_conts.dart';
 import 'package:fake_api_exam/core/di/injection.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/text_title_medium.dart';
+import 'package:fake_api_exam/core/utils/helpers/dialog_helper.dart';
 import 'package:fake_api_exam/core/utils/helpers/responsive_helper.dart';
 import 'package:fake_api_exam/core/utils/helpers/string_helper.dart';
 import 'package:fake_api_exam/core/utils/mapper/list_item_mapper.dart';
@@ -14,7 +16,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/utils/common_widgets/primary_button.dart';
 import '../../../core/utils/common_widgets/reusable_dotted_container.dart';
 import '../../../core/utils/common_widgets/reusable_list_item2.dart';
-import '../../../core/utils/helpers/provider_helper.dart';
 import '../../homepage/data/models/person.dart';
 
 class PersonInfoPage extends ConsumerStatefulWidget {
@@ -33,7 +34,7 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
   late BuildContext _context;
   late Person? _person;
   List<ListItemMapper> items = [];
-  final ProviderHelper _providerHelper = inject<ProviderHelper>();
+  final DialogHelper _dialog = DialogHelper();
   final ResponsiveHelper _responsiveHelper = inject<ResponsiveHelper>();
 
   @override
@@ -44,13 +45,11 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(ref.watch(_providerHelper.personProvider));
-
     _context = context;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: !kIsWeb ? true : false,
-        title: const Text('Personal Information'),
+        title: const Text(StringConst.kPersonalInformation),
       ),
       body: _buildBody(),
     );
@@ -75,7 +74,7 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
                   PrimaryButton(
                     buttonTitle: _person?.website,
                     onPressed: () {
-                      return _launchURL(_person?.website ?? '');
+                      _launchURL(_person?.website ?? '');
                     },
                   ),
                   const SizedBox(height: 50.0),
@@ -95,7 +94,7 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const TextTitleMedium(
-            value: 'Additional Information',
+            value: StringConst.kAdditionalInformation,
             fontWeight: FontWeight.bold,
           ),
           const SizedBox(height: 20.0),
@@ -127,28 +126,28 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
       ListItemMapper(
         image: ImageConst.defaultImagePlaceholder,
         title: _person?.phone,
-        subtitle: 'Phone | Mobile',
+        subtitle: StringConst.kPhoneMobile,
       ),
     );
     items.add(
       ListItemMapper(
         image: ImageConst.defaultImagePlaceholder,
         title: _person?.email,
-        subtitle: 'Personal | Email',
+        subtitle: StringConst.kPersonalEmail,
       ),
     );
     items.add(
       ListItemMapper(
         image: ImageConst.defaultImagePlaceholder,
         title: _person?.gender,
-        subtitle: 'Gender',
+        subtitle: StringConst.kGender,
       ),
     );
     items.add(
       ListItemMapper(
         image: ImageConst.defaultImagePlaceholder,
         title: _person?.birthday,
-        subtitle: 'Birthday',
+        subtitle: StringConst.kBirthday,
       ),
     );
   }
