@@ -104,8 +104,8 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
               itemBuilder: (context, i) {
                 ListItemMapper item = items[i];
                 return ReusableListItem2(
+                  placeholder: item.image,
                   listItemMapper: ListItemMapper(
-                    image: item.image,
                     title: item.title?.toCapitalize(),
                     subtitle: item.subtitle,
                   ),
@@ -124,28 +124,28 @@ class _PersonInfoPageState extends ConsumerState<PersonInfoPage> {
     _person = widget.person;
     items.add(
       ListItemMapper(
-        image: ImageConst.defaultImagePlaceholder,
+        image: ImageConst.kAssetPhone,
         title: _person?.phone,
         subtitle: StringConst.kPhoneMobile,
       ),
     );
     items.add(
       ListItemMapper(
-        image: ImageConst.defaultImagePlaceholder,
+        image: ImageConst.kAssetEmail,
         title: _person?.email,
         subtitle: StringConst.kPersonalEmail,
       ),
     );
     items.add(
       ListItemMapper(
-        image: ImageConst.defaultImagePlaceholder,
+        image: ImageConst.kAssetGender,
         title: _person?.gender,
         subtitle: StringConst.kGender,
       ),
     );
     items.add(
       ListItemMapper(
-        image: ImageConst.defaultImagePlaceholder,
+        image: ImageConst.kAssetBirthday,
         title: _person?.birthday,
         subtitle: StringConst.kBirthday,
       ),
