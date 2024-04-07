@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ReusableListItem extends StatelessWidget {
+class ReusableListItemContainer extends StatelessWidget {
+  final double? cardWidth;
   final Widget card;
   final Widget? circularButton;
 
-  const ReusableListItem({
+  const ReusableListItemContainer({
     super.key,
+    this.cardWidth,
     required this.card,
     this.circularButton,
   });
