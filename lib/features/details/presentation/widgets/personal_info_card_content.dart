@@ -1,5 +1,4 @@
 import 'package:fake_api_exam/core/resource/color_palette.dart';
-import 'package:fake_api_exam/core/utils/mapper/list_item_mapper.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/di/injection.dart';
@@ -41,6 +40,7 @@ class PersonalInfoCardContent extends StatelessWidget {
           TextTitleMedium(
             value: '${person?.address?.city}, ${person?.address?.country}',
             textColor: AppColors.alternativeLabelColor,
+            textAlign: TextAlign.center,
           ),
         ],
       ),
