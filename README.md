@@ -1,16 +1,72 @@
-# fake_api_exam
+# FAKER API
 
-A new Flutter project.
+This project is a simple application which fetches list of persons and its details using FakerApi.
+Please see this link for its documentation https://fakerapi.it/en for your reference.
 
 ## Getting Started
+This application can be downloaded for testing purposes, for additional information of the setup
+please follow the information indicated below.
 
-This project is a starting point for a Flutter application.
+* Download ZIP file
+    * Go to https://github.com/LuigiGo/FakeAPIExam
+    * Select Code Tab
+    * Look for Code dropdown
+    * Tap Download ZIP
 
-A few resources to get you started if this is your first Flutter project:
+* via terminal
+    * Open Terminal
+    * Go to desired location folder
+    * Create new directory, then navigate once created
+    * Enter this command, git clone https://github.com/LuigiGo/FakeAPIExam.git
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+* via Android Studio
+    * Open Android Studio
+    * Select File > New > Project from version control
+    * Version control wizard will show
+    * Tap on URL field, then enter https://github.com/LuigiGo/FakeAPIExam.git
+    * Select Clone
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Android
+1. Open terminal in Android Studio
+2. Then enter, flutter clean
+3. Enter flutter pub get
+4. Then flutter pub run build_runner build --delete-conflicting-outputs
+5. Connect your open or open a simulator
+6. Go to terminal, enter flutter run --dart-define=app.flavor=dev
+
+## IOS
+via Android Studio:
+1. Open terminal in Android Studio
+2. Then enter, flutter clean
+3. Enter flutter pub get
+4. Then flutter pub run build_runner build --delete-conflicting-outputs
+5. In terminal, enter open -a simulator
+6. The via terminal, navigate to the ios directory of the project
+7. Then enter, pod deintegrate
+8. Then pod install
+9. Go back to Android studio
+10. In device selection dropdown, select IOS simulator as test device
+11. In terminal, enter flutter run --dart-define=app.flavor=dev
+
+via XCode:
+1. Open XCode, navigate to your project
+2. Then select ios directory
+3. In XCode, select Runner on the left pane
+4. Look for Targets, then select Runner
+5. Go to Signing & Capabilities
+6. Check Teams, then select your Apple account
+7. Open terminal, then navigate to the ios directory of your project
+8. Then enter, flutter clean
+9. Enter flutter pub get
+10. Then flutter pub run build_runner build --delete-conflicting-outputs
+11. Enter open -a simulator
+12. Then enter, pod deintegrate
+13. Then pod install
+14. Then flutter build ios --dart-define=app.flavor=dev
+
+## Web
+1. Open terminal in Android Studio
+2. Then enter, flutter clean
+3. Enter flutter pub get
+4. Then flutter pub run build_runner build --delete-conflicting-outputs
+5. In terminal, enter flutter run --dart-define=app.flavor=dev
