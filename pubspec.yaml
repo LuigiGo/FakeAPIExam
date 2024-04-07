@@ -39,6 +39,8 @@ dependencies:
   responsive_builder: ^0.7.0
   flutter_riverpod: ^2.3.6
   flutter_launcher_icons: ^0.13.1
+  qr_flutter: ^4.1.0
+
 
 dev_dependencies:
   flutter_test:
