@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 const Color _kPrimary = Color(0xFF171F34);
@@ -15,6 +13,7 @@ class AppColors {
   static const appBarColor = _kPrimary;
   static const defaultLabelColor = _kPrimary;
   static const alternativeLabelColor = _kNetural3;
+  static const snackbarLabelColor = _kNetural;
 
   static const primaryColorScheme = _kSecondary;
   static const circularButtonColor = _kSecondary;
