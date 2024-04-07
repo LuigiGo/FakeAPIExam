@@ -1,38 +1,52 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fake_api_exam/core/const/image_const.dart';
+import 'dart:ui';
+
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_card_container.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_circular_button.dart';
+import 'package:fake_api_exam/core/utils/common_widgets/reusable_list_item1.dart';
+import 'package:fake_api_exam/core/utils/common_widgets/reusable_list_item_container.dart';
+import 'package:fake_api_exam/core/utils/helpers/provider_helper.dart';
+import 'package:fake_api_exam/core/utils/helpers/responsive_helper.dart';
+import 'package:fake_api_exam/core/utils/mapper/list_item_mapper.dart';
 import 'package:fake_api_exam/features/homepage/presentation/blocs/homepage_cubit.dart';
-import 'package:fake_api_exam/features/homepage/presentation/screens/widgets/person_details_content.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import '../../../../core/const/routes_const.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/resource/color_palette.dart';
-import '../../../../core/utils/common_widgets/reusable_list_item.dart';
+import '../../../../core/utils/common_widgets/primary_button.dart';
 import '../../data/models/person.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key, required this.title});
-
-  final String title;
+class Homepage extends ConsumerStatefulWidget {
+  const Homepage({super.key});
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  ConsumerState<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomepageState extends ConsumerState<Homepage> {
   List<Person> persons = [];
 
+  int _loadMoreDataCounter = 0;
+  bool isShowLoadMoreButton = false;
   late BuildContext _context;
   late ScrollController _scrollController;
   late GlobalKey<RefreshIndicatorState> _refreshIndicatorKey;
+  final ResponsiveHelper _responsiveHelper = inject<ResponsiveHelper>();
 
   @override
   void initState() {
     _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
     _initScrollListener();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _refreshIndicatorKey.currentState?.show();
+    });
+
     super.initState();
   }
 
@@ -56,8 +70,11 @@ class _HomepageState extends State<Homepage> {
         BlocListener<HomepageCubit, HomepageState>(
           listener: (_, state) {
             if (state is RefreshHomepage) {
+              _loadMoreDataCounter = 0;
               persons.clear();
             } else if (state is LoadListOfPersonSuccess) {
+              isShowLoadMoreButton = false;
+              _loadMoreDataCounter++;
               persons.addAll(state.persons);
             } else if (state is LoadListOfPersonFailed) {}
           },
@@ -72,13 +89,9 @@ class _HomepageState extends State<Homepage> {
       builder: (context, state) {
         _context = context;
 
-        if (state is HomepageInitial) {
-          _refreshIndicatorKey.currentState?.show();
-        }
-
         return Scaffold(
           appBar: AppBar(
-            title: Text(widget.title),
+            title: const Text('Person Book'),
           ),
           body: _buildBody(context, state),
         );
@@ -92,44 +105,95 @@ class _HomepageState extends State<Homepage> {
       onRefresh: () async {
         await _loadMoreData(10, isRefresh: true);
       },
-      child: Column(
-        children: [
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: ListView.builder(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                key: const PageStorageKey(0),
-                itemCount: persons.length,
-                itemBuilder: (_, i) {
-                  Person person = persons[i];
-                  return ReusableListItem(
-                    card: ReusableCardContainer(
-                      cardContent: PersonDetailsContent(person: person),
+      child: ResponsiveBuilder(
+        builder: (context, sizingInfo) {
+          return Center(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context).copyWith(
+                        dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        },
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        key: const PageStorageKey(0),
+                        itemCount: persons.length,
+                        itemBuilder: (_, i) {
+                          Person person = persons[i];
+                          String name =
+                              '${person.firstname} ${person.lastname}';
+
+                          return ReusableCardContainer(
+                            cardWidth: _responsiveHelper.setResponsiveWidth(
+                              sizingInfo: sizingInfo,
+                            ),
+                            cardContent: ReusableListItemContainer(
+                              card: ReusableListItem1(
+                                listItemMapper: ListItemMapper(
+                                  image: person.image,
+                                  title: name,
+                                  subtitle: person.email,
+                                ),
+                              ),
+                              circularButton: ReusableCircularButton(
+                                icon: Icons.info_outline_rounded,
+                                buttonColor: AppColors.defaultButtonColor,
+                                onPressed: () {
+                                  ref
+                                      .read(inject<ProviderHelper>()
+                                          .personProvider
+                                          .notifier)
+                                      .state = person;
+                                  Navigator.pushNamed(
+                                    context,
+                                    RoutesConst.detailsPage,
+                                    arguments: person,
+                                  );
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                    circularButton: ReusableCircularButton(
-                      buttonColor: AppColors.circularButtonColor,
-                      icon: Icons.info_outline_rounded,
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          RoutesConst.detailsPage,
-                          arguments: person,
-                        );
-                      },
+                  ),
+                ),
+                Visibility(
+                  visible: !kIsWeb && state is LoadListOfPersonsLoading,
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: 30.0,
+                      height: 30.0,
+                      child: CircularProgressIndicator(),
                     ),
-                  );
-                },
-              ),
+                  ),
+                ),
+                Visibility(
+                  visible: kIsWeb && isShowLoadMoreButton,
+                  child: Container(
+                    width: _responsiveHelper.setResponsiveWidth(
+                      sizingInfo: sizingInfo,
+                    ),
+                    padding: const EdgeInsets.all(10.0),
+                    child: PrimaryButton(
+                      buttonTitle: 'Load More',
+                      onPressed: () => _loadMoreData(20),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Visibility(
-            visible: state is LoadListOfPersonsLoading,
-            child: const CircularProgressIndicator(),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -140,9 +204,22 @@ class _HomepageState extends State<Homepage> {
       if (_scrollController.position.atEdge) {
         bool isTopOfList = _scrollController.position.pixels == 0;
         if (!isTopOfList) {
-          setState(() {
-            _loadMoreData(20);
-          });
+          if (_loadMoreDataCounter <= 4) {
+            if (!kIsWeb) {
+              _loadMoreData(20);
+            } else {
+              setState(() {
+                isShowLoadMoreButton = true;
+              });
+            }
+          } else {
+            if (!kIsWeb) {
+              const snackBar = SnackBar(
+                content: Text('Oops! There\'s no available data.'),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          }
         }
       }
     });
