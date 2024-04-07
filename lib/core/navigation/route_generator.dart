@@ -1,4 +1,4 @@
-import 'package:fake_api_exam/features/details/presentation/persons_details_page.dart';
+import 'package:fake_api_exam/features/details/presentation/person_info_page.dart';
 import 'package:fake_api_exam/features/homepage/data/models/person.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +12,11 @@ class RouteGenerator {
 
     switch (settings.name) {
       case RoutesConst.root:
-        page = const Homepage(
-          title: 'Homepage',
-        );
+        page = const Homepage();
         break;
       case RoutesConst.detailsPage:
-        page = PersonsDetailsPage(
-          person: args as Person,
+        page = PersonInfoPage(
+          person: args as Person?,
         );
         break;
     }
