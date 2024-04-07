@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return ResponsiveApp(
       builder: (BuildContext context) {
         return MaterialApp(
-          title: 'Flutter Demo',
+          title: 'FakeApi',
           theme: ThemeData(
             useMaterial3: false,
             appBarTheme: const AppBarTheme(
