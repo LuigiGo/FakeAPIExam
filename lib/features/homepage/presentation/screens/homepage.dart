@@ -1,9 +1,13 @@
 import 'dart:ui';
 
+import 'package:fake_api_exam/core/const/string_conts.dart';
+import 'package:fake_api_exam/core/network/exceptions/server_error.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_card_container.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_circular_button.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_list_item1.dart';
 import 'package:fake_api_exam/core/utils/common_widgets/reusable_list_item_container.dart';
+import 'package:fake_api_exam/core/utils/common_widgets/text_title_medium.dart';
+import 'package:fake_api_exam/core/utils/helpers/dialog_helper.dart';
 import 'package:fake_api_exam/core/utils/helpers/provider_helper.dart';
 import 'package:fake_api_exam/core/utils/helpers/responsive_helper.dart';
 import 'package:fake_api_exam/core/utils/mapper/list_item_mapper.dart';
@@ -36,6 +40,7 @@ class _HomepageState extends ConsumerState<Homepage> {
   late BuildContext _context;
   late ScrollController _scrollController;
   late GlobalKey<RefreshIndicatorState> _refreshIndicatorKey;
+  final DialogHelper _dialog = inject<DialogHelper>();
   final ResponsiveHelper _responsiveHelper = inject<ResponsiveHelper>();
 
   @override
@@ -69,6 +74,7 @@ class _HomepageState extends ConsumerState<Homepage> {
       listeners: [
         BlocListener<HomepageCubit, HomepageState>(
           listener: (_, state) {
+            print(state);
             if (state is RefreshHomepage) {
               _loadMoreDataCounter = 0;
               persons.clear();
@@ -76,7 +82,15 @@ class _HomepageState extends ConsumerState<Homepage> {
               isShowLoadMoreButton = false;
               _loadMoreDataCounter++;
               persons.addAll(state.persons);
-            } else if (state is LoadListOfPersonFailed) {}
+            } else if (state is LoadListOfPersonFailed) {
+              ServerError err = state.serverError;
+              _dialog.showOneButtonDialog(
+                _context,
+                title: err.header,
+                subtitle: err.message,
+                buttonTitle: 'Okay',
+              );
+            }
           },
         ),
       ],
@@ -91,7 +105,7 @@ class _HomepageState extends ConsumerState<Homepage> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Person Book'),
+            title: const Text(StringConst.kPersonBook),
           ),
           body: _buildBody(context, state),
         );
@@ -185,7 +199,7 @@ class _HomepageState extends ConsumerState<Homepage> {
                     ),
                     padding: const EdgeInsets.all(10.0),
                     child: PrimaryButton(
-                      buttonTitle: 'Load More',
+                      buttonTitle: StringConst.kLoadMore,
                       onPressed: () => _loadMoreData(20),
                     ),
                   ),
@@ -215,7 +229,10 @@ class _HomepageState extends ConsumerState<Homepage> {
           } else {
             if (!kIsWeb) {
               const snackBar = SnackBar(
-                content: Text('Oops! There\'s no available data.'),
+                content: TextTitleMedium(
+                  value: StringConst.kTheresNoAvailableData,
+                  textColor: AppColors.snackbarLabelColor,
+                ),
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
