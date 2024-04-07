@@ -36,7 +36,7 @@ class ReusableListItem1 extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
