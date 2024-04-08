@@ -26,6 +26,8 @@ please follow the information indicated below.
     * Tap on URL field, then enter https://github.com/LuigiGo/FakeAPIExam.git
     * Select Clone
 
+Note: For testing purposes, the environment file was included in this repository.
+
 ## Android
 1. Open terminal in Android Studio
 2. Then enter, flutter clean
@@ -69,4 +71,4 @@ via XCode:
 2. Then enter, flutter clean
 3. Enter flutter pub get
 4. Then flutter pub run build_runner build --delete-conflicting-outputs
-5. In terminal, enter flutter run --dart-define=app.flavor=dev
+5. In terminal, enter flutter run -d chrome --dart-define=app.flavor=dev
