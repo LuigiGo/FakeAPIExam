@@ -72,3 +72,20 @@ via XCode:
 3. Enter flutter pub get
 4. Then flutter pub run build_runner build --delete-conflicting-outputs
 5. In terminal, enter flutter run -d chrome --dart-define=app.flavor=dev
+
+## Sample Videos
+IOS
+
+https://github.com/LuigiGo/FakeAPIExam/assets/18436118/045084eb-80ce-439d-986a-61ea9ece9230
+
+
+Android
+
+https://github.com/LuigiGo/FakeAPIExam/assets/18436118/e4765748-ee39-4566-a09c-c8a6aa94a278
+
+
+Web
+
+https://github.com/LuigiGo/FakeAPIExam/assets/18436118/02772758-f22f-40ad-9b90-9738f6ee6049
+
+
